@@ -181,11 +181,11 @@ internal sealed class Socks5Handler : SocksHandler {
 					Reply[1] = 0;  //Everything is ok :)
 					Reply[2] = 0;  //Reserved
 					Reply[3] = 1;  //We're going to send a IPv4 address
-					Reply[4] = (byte)(Math.Floor((LocalIP % 256)));  //IP Address/1
-					Reply[5] = (byte)(Math.Floor((LocalIP % 65536) / 256));  //IP Address/2
-					Reply[6] = (byte)(Math.Floor((LocalIP % 16777216) / 65536));  //IP Address/3
-					Reply[7] = (byte)(Math.Floor(LocalIP / 16777216));  //IP Address/4
-					Reply[8] = (byte)(Math.Floor(((IPEndPoint)AcceptSocket.LocalEndPoint).Port / 256));  //Port/1
+					Reply[4] = (byte)(Math.Floor((double)(LocalIP % 256)));  //IP Address/1
+					Reply[5] = (byte)(Math.Floor((double)((LocalIP % 65536) / 256)));  //IP Address/2
+					Reply[6] = (byte)(Math.Floor((double)((LocalIP % 16777216) / 65536)));  //IP Address/3
+					Reply[7] = (byte)(Math.Floor((double)(LocalIP / 16777216)));  //IP Address/4
+					Reply[8] = (byte)(Math.Floor((double)(((IPEndPoint)this.AcceptSocket.LocalEndPoint).Port / 256)));  //Port/1
 					Reply[9] = (byte)(((IPEndPoint)AcceptSocket.LocalEndPoint).Port % 256);  //Port/2
 					Connection.BeginSend(Reply, 0, Reply.Length, SocketFlags.None, new AsyncCallback(this.OnStartAccept), Connection);
 					break;
@@ -230,10 +230,10 @@ internal sealed class Socks5Handler : SocksHandler {
 		try {
 			ToSend = new byte[]{5, Value, 0, 1,
 						(byte)(((IPEndPoint)RemoteConnection.LocalEndPoint).Address.Address % 256),
-						(byte)(Math.Floor((((IPEndPoint)RemoteConnection.LocalEndPoint).Address.Address % 65536) / 256)),
-						(byte)(Math.Floor((((IPEndPoint)RemoteConnection.LocalEndPoint).Address.Address % 16777216) / 65536)),
-						(byte)(Math.Floor(((IPEndPoint)RemoteConnection.LocalEndPoint).Address.Address / 16777216)),
-						(byte)(Math.Floor(((IPEndPoint)RemoteConnection.LocalEndPoint).Port / 256)),
+						(byte)(Math.Floor((double)((((IPEndPoint)this.RemoteConnection.LocalEndPoint).Address.Address % 65536) / 256))),
+						(byte)(Math.Floor((double)((((IPEndPoint)this.RemoteConnection.LocalEndPoint).Address.Address % 16777216) / 65536))),
+						(byte)(Math.Floor((double)(((IPEndPoint)this.RemoteConnection.LocalEndPoint).Address.Address / 16777216))),
+						(byte)(Math.Floor((double)(((IPEndPoint)this.RemoteConnection.LocalEndPoint).Port / 256))),
 						(byte)(((IPEndPoint)RemoteConnection.LocalEndPoint).Port % 256)};
 		} catch {
 			ToSend = new byte[] {5, 1, 0, 1, 0, 0, 0, 0, 0, 0};
